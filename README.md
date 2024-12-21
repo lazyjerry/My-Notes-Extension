@@ -7,7 +7,7 @@
 1. **在 FB / IG / YT / Threads 網頁中自動偵測**：  
    - 為用戶名稱或頻道名稱旁邊加入「備註」欄位，讓你能隨時紀錄、查看、編輯筆記。  
 2. **支援 SPA 網站 (單頁應用) 的 URL 變化**：  
-   - 透過覆蓋 `history.pushState` / `replaceState` 及 `MutationObserver` 同時偵測 URL 變化。  
+   - 透過覆蓋 `history.pushState` / `replaceState` 及 `MutationObserver` 同時偵測 URL 變化。 （已取消功能，改為 popup 時偵測） 
 3. **匯出與匯入 JSON**：  
    - 只要在 Popup 內點擊匯出按鈕，即可將所有備註以 JSON 輸出。  
    - 也可貼上 JSON 一鍵匯入，實現多瀏覽器或重裝後快速搬移。  
