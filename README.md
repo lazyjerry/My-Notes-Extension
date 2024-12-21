@@ -18,7 +18,7 @@
 
 - **尚未上架**：  
   - 你可以手動下載整個專案，並在 `chrome://extensions/` → 開啟「開發者模式」 → 點擊「載入未封裝項目」，選擇本專案資料夾。  
-- **Chrome Web Store** (TODO)：  
+- **Chrome Web Store**：  
   - [**點擊這裡前往安裝**](https://chrome.google.com/webstore/detail/my-notes-extension/njnkpkkcpcfdjjgminnlkfmjegjpojoe)  ← 2024-12-21 提交審核，待上架後更新此連結 
 
 ## 使用教學
