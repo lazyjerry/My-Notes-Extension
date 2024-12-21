@@ -1,0 +1,24 @@
+{
+  "name": "My Notes Extension",
+  "version": "1.0.1",
+  "manifest_version": 3,
+  "description": "在 IG / Facebook / YouTube / Threads 網頁的個人資料頁面， 點擊可添加 / 修改 / 查看備註的欄位， 並支援匯出與匯入 JSON。",
+  "permissions": [
+    "storage",
+    "scripting"
+  ],
+  "host_permissions": [
+    "*://*.threads.net/*",
+    "*://*.facebook.com/*",
+    "*://*.instagram.com/*",
+    "*://*.youtube.com/*"
+  ],
+  "action":
+  {
+    "default_popup": "popup.html"
+  },
+  "background":
+  {
+    "service_worker": "background.js"
+  }
+}
