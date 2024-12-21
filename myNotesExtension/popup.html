@@ -147,6 +147,41 @@
     #myExt_noteSection {
       display: none;
     }
+
+    #myExt_charCount {
+      font-size: 12px;
+      color: #666;
+      text-align: right;
+      margin-top: 4px;
+    }
+
+    /* 定義旋轉動畫 */
+    @keyframes rotateAnimation {
+      0% {
+        transform: rotate(0deg);
+      }
+
+      25% {
+        transform: rotate(5deg);
+      }
+
+      50% {
+        transform: rotate(-5deg);
+      }
+
+      75% {
+        transform: rotate(5deg);
+      }
+
+      100% {
+        transform: rotate(0deg);
+      }
+    }
+
+    /* 動畫類別 */
+    .animate-rotate {
+      animation: rotateAnimation 0.5s ease;
+    }
     </style>
   </head>
 
@@ -168,14 +203,15 @@
       <div id="myExt_message">目前非個人頁面</div>
       <!-- 若有 userId，就顯示此區塊 -->
       <div id="myExt_noteSection">
-        <textarea id="myExt_noteInput" placeholder="對此人/頻道的備註..."></textarea>
+        <textarea id="myExt_noteInput" placeholder="對此人/頻道的備註..." maxlength="100"></textarea>
+        <!-- 新增的字數計數器 -->
+        <div id="myExt_charCount">100 / 100</div>
         <button id="myExt_saveBtn" class="disabled">儲存備註</button>
         <div id="myExt_lastUpdated"></div>
       </div>
     </div>
     <!-- 匯入／匯出分頁 -->
     <div id="myExt_tabImportExport" class="myExt_tabContent">
-      <textarea id="myExt_jsonOutput" readonly placeholder="匯出時會顯示在此處..." style="height:80px;"></textarea>
       <button id="myExt_exportBtn">匯出 JSON</button>
       <textarea id="myExt_jsonInput" placeholder="在此貼上 JSON，再按下方按鈕匯入" style="height:80px;"></textarea>
       <button id="myExt_importBtn">匯入 JSON</button>
@@ -183,7 +219,7 @@
     <!-- 在最底部顯示目前偵測到的頁面 -->
     <div id="myExt_currentUrl">目前偵測到的頁面：<span id="myExt_currentUrlText">N/A</span></div>
     <!-- 指向 popup.js 腳本 (注意檔名/路徑需一致) -->
-    <script src="popup.js"></script>
+    <script src="myExt_popup.js"></script>
   </body>
 
 </html>

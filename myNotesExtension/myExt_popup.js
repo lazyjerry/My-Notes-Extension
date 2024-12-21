@@ -7,6 +7,7 @@ document.addEventListener("DOMContentLoaded", () => {
   const messageDiv = document.getElementById("myExt_message");
   const noteSection = document.getElementById("myExt_noteSection");
   const noteInput = document.getElementById("myExt_noteInput");
+  const charCount = document.getElementById("myExt_charCount");
   const saveBtn = document.getElementById("myExt_saveBtn");
   const lastUpdatedDiv = document.getElementById("myExt_lastUpdated");
 
@@ -14,6 +15,15 @@ document.addEventListener("DOMContentLoaded", () => {
   const importBtn = document.getElementById("myExt_importBtn");
   const jsonOutput = document.getElementById("myExt_jsonOutput");
   const jsonInput = document.getElementById("myExt_jsonInput");
+
+  if (noteInput && charCount) {
+    noteInput.addEventListener("input", () => {
+      const maxLength = parseInt(noteInput.getAttribute("maxlength"), 10);
+      const currentLength = noteInput.value.length;
+      const remaining = maxLength - currentLength;
+      charCount.textContent = `${remaining} / ${maxLength}`;
+    });
+  }
 
   // 用於分頁切換
   const tabMenu = document.getElementById("myExt_tabMenu");
@@ -29,6 +39,7 @@ document.addEventListener("DOMContentLoaded", () => {
   if (refreshBtn) {
     refreshBtn.addEventListener("click", () => {
       sendManualRefresh();
+      triggerButtonAnimation(refreshBtn);
     });
   }
 
@@ -99,6 +110,8 @@ document.addEventListener("DOMContentLoaded", () => {
     const newNote = noteInput.value.trim();
     const now = new Date();
 
+    triggerButtonAnimation(saveBtn);
+
     // 將新的備註與更新時間存入 storage
     chrome.storage.local.set({
       [userId]: newNote,
@@ -118,10 +131,30 @@ document.addEventListener("DOMContentLoaded", () => {
   // 匯出 JSON
   // -------------------------
   exportBtn.addEventListener("click", () => {
+
+    triggerButtonAnimation(exportBtn);
     chrome.storage.local.get(null, (items) => {
-      // 將所有在 local storage 的資料轉成漂亮的 JSON 字串
+      // 將所有資料轉為 JSON 字串
       const jsonString = JSON.stringify(items, null, 2);
-      jsonOutput.value = jsonString;
+
+      // 產生一個 Blob 物件
+      const blob = new Blob([jsonString], { type: "application/json" });
+      // 建立 Blob URL
+      const url = URL.createObjectURL(blob);
+
+      // 動態建立 <a>，並觸發下載
+      const link = document.createElement("a");
+      link.href = url;
+      link.download = `MY-NOTE-BACKUP_${Date.now()}.json`;
+      // 檔名可自訂，例如 myNotesBackup_1666666666666.json
+
+      // 觸發點擊後，移除連結
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+
+      // 釋放 Blob URL
+      URL.revokeObjectURL(url);
     });
   });
 
@@ -129,6 +162,8 @@ document.addEventListener("DOMContentLoaded", () => {
   // 匯入 JSON
   // -------------------------
   importBtn.addEventListener("click", () => {
+    triggerButtonAnimation(importBtn);
+
     const importData = jsonInput.value.trim();
     if (!importData) {
       alert("請先在上方貼上 JSON 資料，再嘗試匯入。");
@@ -221,6 +256,26 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
 });
+
+/**
+ * 封裝函式：觸發按鈕的動畫效果
+ * @param {HTMLElement} button - 要觸發動畫的按鈕元素
+ */
+function triggerButtonAnimation(button) {
+  // 移除之前的動畫類別（如果有的話）
+  button.classList.remove("animate-rotate");
+
+  // 選擇要使用的動畫類別，這裡以 rotate 為例
+  // 如果想要使用 shake，將 'animate-rotate' 換成 'animate-shake'
+  button.classList.add("animate-rotate");
+
+  // 監聽動畫結束事件，移除動畫類別以便下次觸發
+  button.addEventListener("animationend", () => {
+    button.classList.remove("animate-rotate");
+    // 若使用 shake 動畫，請同時移除 'animate-shake'
+    // button.classList.remove("animate-shake");
+  }, { once: true }); // 只執行一次
+}
 
 // === 小工具：格式化日期 ===
 function formatDateTime(dateObj) {
