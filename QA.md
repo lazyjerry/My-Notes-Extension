@@ -30,8 +30,8 @@
 1. **尚未上架前（開發者模式安裝）**  
    - 下載整個專案資料夾，進入 `chrome://extensions/`  
    - 開啟「開發者模式」，點擊「載入未封裝項目 (Load unpacked)」，選擇此專案資料夾即可。  
-2. **Chrome Web Store 連結 (待上架)**  
-   - [**點此前往安裝**](https://chrome.google.com/webstore/detail/TODO) ← 上架後請改為實際連結
+2. **Chrome Web Store 連結 **  
+   - [**點擊這裡前往安裝**](https://chrome.google.com/webstore/detail/my-notes-extension/njnkpkkcpcfdjjgminnlkfmjegjpojoe)  ← 2024-12-21 提交審核，待上架後更新此連結
 
 ## 使用教學
 
