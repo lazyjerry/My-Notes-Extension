@@ -20,9 +20,7 @@
    - 為使用者名稱旁邊或頻道名稱旁邊，加入「備註」輸入框，可即時編輯並自動保存。
 2. **匯出與匯入 JSON**  
    - 在 Popup 內可一鍵匯出所有備註為 JSON，並可在其他瀏覽器或重裝後快速匯入。
-3. **支援單頁式應用**  
-   - 透過覆蓋 `history.pushState` / `replaceState` 與 `MutationObserver` 雙管齊下，偵測 SPA URL 變化。 （已取消功能，改為 popup 時偵測）
-4. **Threads 支援**  
+3. **Threads 支援**  
    - 能解析 Threads（`threads.net/@username`）個人頁面網址；但請注意官方網頁版無法正常列出用戶個人頁面，多半需「分享個人檔案」連結才能取得。
 
 ## 安裝方式
