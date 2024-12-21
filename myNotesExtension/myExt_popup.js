@@ -2,7 +2,6 @@
 
 document.addEventListener("DOMContentLoaded", () => {
 
-  injectContentScript();
   // === DOM 元素參照 ===
   const messageDiv = document.getElementById("myExt_message");
   const noteSection = document.getElementById("myExt_noteSection");
@@ -254,6 +253,9 @@ document.addEventListener("DOMContentLoaded", () => {
       );
     });
   }
+
+
+  injectContentScript();
 
 });
 

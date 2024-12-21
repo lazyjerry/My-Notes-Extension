@@ -1,48 +1,6 @@
 // contentScript.js
 
 (function() {
-  // === 1) 覆蓋 pushState / replaceState，監測 URL 變化 ===
-  history.pushState = (originalPushState => function(...args) {
-    let ret = originalPushState.apply(this, args);
-    dispatchLocationChange();
-    return ret;
-  })(history.pushState);
-
-  history.replaceState = (originalReplaceState => function(...args) {
-    let ret = originalReplaceState.apply(this, args);
-    dispatchLocationChange();
-    return ret;
-  })(history.replaceState);
-
-  window.addEventListener("popstate", () => {
-    dispatchLocationChange();
-  });
-
-  // 自訂事件 locationchange，用來在任何「URL 可能改變」的時候觸發
-  function dispatchLocationChange() {
-    window.dispatchEvent(new Event("locationchange"));
-  }
-
-  // === 2) 搭配 MutationObserver，監控 DOM 大幅更新 ===
-  let lastUrl = window.location.href;
-  const observer = new MutationObserver(() => {
-    if (window.location.href !== lastUrl) {
-      lastUrl = window.location.href;
-      console.log("[MutationObserver] detect new URL =>", lastUrl);
-      // 這裡手動觸發 locationchange 事件
-      dispatchLocationChange();
-    }
-  });
-  observer.observe(document, { childList: true, subtree: true });
-
-  // === 3) 監聽 locationchange 事件，執行 onUrlChange ===
-  window.addEventListener("locationchange", () => {
-    console.log("URL changed to", window.location.href);
-    onUrlChange();
-  });
-
-  // === 4) 頁面剛載入也執行一次 onUrlChange ===
-  onUrlChange();
 
   function onUrlChange() {
     let url = window.location.href;
@@ -55,7 +13,6 @@
     if (userId) {
       console.log("偵測到用戶ID:", userId);
       chrome.storage.local.set({ currentUserId: userId });
-      chrome.runtime.sendMessage({ type: "FOUND_USER_ID", userId });
     } else {
       chrome.storage.local.remove("currentUserId");
     }
