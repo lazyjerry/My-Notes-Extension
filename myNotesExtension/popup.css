@@ -1,0 +1,189 @@
+/* === 全局樣式 === */
+body {
+  width: 400px;
+  margin: 0;
+  padding: 10px;
+  font-family: Arial, sans-serif;
+  background: linear-gradient(135deg, #fee9f2 0%, #ffffff 20%, #e6fff2 40%, #ffffff 60%, #e6f2ff 80%);
+}
+
+h1 {
+  font-size: 16px;
+  margin-top: 0;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+button.refresh-btn {
+  max-width: 100px;
+  height: 26px;
+  font-size: 14px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* 圓角設定＆基礎外觀 */
+textarea,
+button {
+  border-radius: 8px;
+  border: none;
+  outline: none;
+  font-family: inherit;
+}
+
+/* 調整輸入框的預設高度、內距 */
+textarea {
+  width: 100%;
+  max-width: 380px;
+  height: 60px;
+  padding: 6px 8px;
+  resize: vertical;
+  margin: 1ch 0;
+}
+
+/* 按鈕樣式：漸層背景 + 圓角 */
+button {
+  width: 100%;
+  padding: 10px 12px;
+  color: #333;
+  cursor: pointer;
+  background: linear-gradient(90deg, #fec5e5, #b3f4d8, #b3d4f4);
+  margin: 1ch 0;
+  font-weight: bold;
+  transition: transform 0.3s ease, background 0.3s ease;
+}
+
+button:hover {
+  transform: rotate(2deg);
+}
+
+button.disabled {
+  opacity: 0.5;
+  pointer-events: none;
+}
+
+/* 分頁 (Tabs) 區塊 */
+.myExt_tabs {
+  display: flex;
+  list-style: none;
+  padding: 0;
+  margin: 0 0 8px 0;
+  border-bottom: 2px solid rgba(255, 255, 255, 0.5);
+}
+
+.myExt_tabs li {
+  flex: 1;
+  text-align: center;
+  padding: 8px 0;
+  cursor: pointer;
+  border-radius: 8px 8px 0 0;
+  background: rgba(255, 255, 255, 0.6);
+  margin-right: 2px;
+  font-weight: bold;
+  user-select: none;
+}
+
+.myExt_tabs li:last-child {
+  margin-right: 0;
+}
+
+.myExt_tabs li.active {
+  background: rgba(255, 255, 255, 0.9);
+  box-shadow: 0 -2px 5px rgba(0, 0, 0, 0.1) inset;
+}
+
+.myExt_tabContent {
+  display: none;
+  padding: 5px 0;
+}
+
+.myExt_tabContent.active {
+  display: block;
+}
+
+/* 顯示最後更新時間 */
+#myExt_lastUpdated {
+  margin-top: 8px;
+  font-size: 12px;
+  color: #666;
+}
+
+#myExt_noteSection {
+  display: none;
+}
+
+#myExt_charCount {
+  font-size: 12px;
+  color: #666;
+  text-align: right;
+  margin-top: 4px;
+}
+
+/* 定義旋轉動畫 */
+@keyframes rotateAnimation {
+  0% {
+    transform: rotate(0deg);
+  }
+
+  25% {
+    transform: rotate(5deg);
+  }
+
+  50% {
+    transform: rotate(-5deg);
+  }
+
+  75% {
+    transform: rotate(5deg);
+  }
+
+  100% {
+    transform: rotate(0deg);
+  }
+}
+
+.animate-rotate {
+  animation: rotateAnimation 0.5s ease;
+}
+
+/* 搜尋輸入框樣式 */
+#myExt_searchInput {
+  width: 100%;
+  max-width: 380px;
+  padding: 10px 12px;
+  margin: 1ch 0;
+  border-radius: 8px;
+  border: 1px solid #ddd;
+  font-family: inherit;
+  font-size: 14px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  transition: box-shadow 0.3s ease, border 0.3s ease;
+}
+
+#myExt_searchInput:focus {
+  border-color: #b3d4f4;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+  outline: none;
+}
+
+#myExt_searchContainer {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  margin-top: 10px;
+}
+
+#myExt_searchResults {
+  margin-top: 10px;
+  max-height: 150px;
+  overflow-y: auto;
+  font-size: 14px;
+  padding: 8px;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.9);
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}

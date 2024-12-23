@@ -4,222 +4,43 @@
   <head>
     <meta charset="utf-8" />
     <title>My Notes Popup</title>
-    <style>
-    /* === 全局樣式 === */
-    body {
-      width: 400px;
-      margin: 0;
-      padding: 10px;
-      font-family: Arial, sans-serif;
-      /* 
-          粉藍、粉綠、粉紅 + 少量白色漸層
-          可依需求微調每個顏色的漸層位置 
-        */
-      background: linear-gradient(135deg,
-        #fee9f2 0%,
-        #ffffff 20%,
-        #e6fff2 40%,
-        #ffffff 60%,
-        #e6f2ff 80%);
-    }
-
-    h1 {
-      font-size: 16px;
-      margin-top: 0;
-      display: flex;
-      /* 讓標題與按鈕並排 */
-      align-items: center;
-      /* 垂直置中 */
-      justify-content: space-between;
-      /* 讓按鈕靠右 */
-    }
-
-    button.refresh-btn {
-      max-width: 100px;
-      /* 使其呈現近似正方形 */
-      height: 26px;
-      font-size: 14px;
-      cursor: pointer;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-    }
-
-    /* 圓角設定＆基礎外觀 */
-    textarea,
-    button {
-      border-radius: 8px;
-      border: none;
-      outline: none;
-      font-family: inherit;
-    }
-
-    /* 
-        調整輸入框的預設高度、內距；
-        並使用 margin: 1ch 0 讓它上下與其他元素之間
-        有 1 字元寬度的間距 
-      */
-    textarea {
-      width: 100%;
-      max-width: 380px;
-      height: 60px;
-      padding: 6px 8px;
-      resize: vertical;
-      margin: 1ch 0;
-    }
-
-    /* 按鈕樣式：漸層背景 + 圓角 */
-    button {
-      width: 100%;
-      padding: 10px 12px;
-      color: #333;
-      cursor: pointer;
-      background: linear-gradient(90deg, #fec5e5, #b3f4d8, #b3d4f4);
-      margin: 1ch 0;
-      /* 與上下元素的距離 */
-      font-weight: bold;
-
-      /* 加上 transition，讓 transform 與背景在 hover 時有動畫 */
-      transition:
-        transform 0.3s ease,
-        background 0.3s ease;
-    }
-
-    /* hover 時，將背景位置往右移動些許 */
-    button:hover {
-      transform: rotate(2deg);
-    }
-
-    /* 按鈕「不可點擊」的視覺狀態 */
-    button.disabled {
-      opacity: 0.5;
-      pointer-events: none;
-    }
-
-    /* === 分頁 (Tabs) 區塊 === */
-    .myExt_tabs {
-      display: flex;
-      list-style: none;
-      padding: 0;
-      margin: 0 0 8px 0;
-      border-bottom: 2px solid rgba(255, 255, 255, 0.5);
-    }
-
-    .myExt_tabs li {
-      flex: 1;
-      text-align: center;
-      padding: 8px 0;
-      cursor: pointer;
-      border-radius: 8px 8px 0 0;
-      background: rgba(255, 255, 255, 0.6);
-      margin-right: 2px;
-      font-weight: bold;
-      user-select: none;
-    }
-
-    .myExt_tabs li:last-child {
-      margin-right: 0;
-    }
-
-    .myExt_tabs li.active {
-      background: rgba(255, 255, 255, 0.9);
-      box-shadow: 0 -2px 5px rgba(0, 0, 0, 0.1) inset;
-    }
-
-    /* 分頁內容容器：預設隱藏，只有 active 顯示 */
-    .myExt_tabContent {
-      display: none;
-      padding: 5px 0;
-    }
-
-    .myExt_tabContent.active {
-      display: block;
-    }
-
-    /* 顯示最後更新時間 */
-    #myExt_lastUpdated {
-      margin-top: 8px;
-      font-size: 12px;
-      color: #666;
-    }
-
-    /* 預設隱藏，若偵測到 userId 再顯示 (在 JS 裡切換) */
-    #myExt_noteSection {
-      display: none;
-    }
-
-    #myExt_charCount {
-      font-size: 12px;
-      color: #666;
-      text-align: right;
-      margin-top: 4px;
-    }
-
-    /* 定義旋轉動畫 */
-    @keyframes rotateAnimation {
-      0% {
-        transform: rotate(0deg);
-      }
-
-      25% {
-        transform: rotate(5deg);
-      }
-
-      50% {
-        transform: rotate(-5deg);
-      }
-
-      75% {
-        transform: rotate(5deg);
-      }
-
-      100% {
-        transform: rotate(0deg);
-      }
-    }
-
-    /* 動畫類別 */
-    .animate-rotate {
-      animation: rotateAnimation 0.5s ease;
-    }
-    </style>
+    <link rel="stylesheet" href="popup.css">
   </head>
 
   <body>
     <h1>個人頁面備註
-      <!-- 刷新按鈕 (正方形)，顯示一個旋轉符號或 icon -->
-      <button id="myExt_refreshBtn" class="refresh-btn" title="重新偵測">
-        重新偵測
-      </button>
+      <button id="myExt_refreshBtn" class="refresh-btn" title="重新偵測">重新偵測</button>
     </h1>
-    <!-- 分頁標籤 (Tabs) -->
     <ul id="myExt_tabMenu" class="myExt_tabs">
       <li data-tab="myExt_tabNotes" class="active">備註</li>
       <li data-tab="myExt_tabImportExport">匯入／匯出</li>
+      <li data-tab="myExt_tabSearch">搜尋</li>
     </ul>
-    <!-- 備註分頁 (預設顯示) -->
     <div id="myExt_tabNotes" class="myExt_tabContent active">
-      <!-- 若目前無偵測到 userId，就顯示這行 -->
       <div id="myExt_message">目前非個人頁面</div>
-      <!-- 若有 userId，就顯示此區塊 -->
       <div id="myExt_noteSection">
         <textarea id="myExt_noteInput" placeholder="對此人/頻道的備註..." maxlength="100"></textarea>
-        <!-- 新增的字數計數器 -->
         <div id="myExt_charCount">100 / 100</div>
         <button id="myExt_saveBtn" class="disabled">儲存備註</button>
         <div id="myExt_lastUpdated"></div>
       </div>
     </div>
-    <!-- 匯入／匯出分頁 -->
     <div id="myExt_tabImportExport" class="myExt_tabContent">
       <button id="myExt_exportBtn">匯出 JSON</button>
       <textarea id="myExt_jsonInput" placeholder="在此貼上 JSON，再按下方按鈕匯入" style="height:80px;"></textarea>
       <button id="myExt_importBtn">匯入 JSON</button>
     </div>
-    <!-- 在最底部顯示目前偵測到的頁面 -->
+    <div id="myExt_tabSearch" class="myExt_tabContent">
+      <div id="myExt_searchContainer">
+        <input id="myExt_searchInput" type="text" placeholder="輸入關鍵字進行搜尋" />
+        <button id="myExt_searchBtn">搜尋</button>
+      </div>
+      <textarea id="myExt_searchResults">
+      </textarea>
+    </div>
     <div id="myExt_currentUrl">目前偵測到的頁面：<span id="myExt_currentUrlText">N/A</span></div>
-    <!-- 指向 popup.js 腳本 (注意檔名/路徑需一致) -->
-    <script src="myExt_popup.js"></script>
+    <script src="model.js"></script>
+    <script src="controller.js"></script>
   </body>
 
 </html>
