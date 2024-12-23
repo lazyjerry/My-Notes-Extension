@@ -7,7 +7,7 @@ body {
   background: linear-gradient(135deg, #fee9f2 0%, #ffffff 20%, #e6fff2 40%, #ffffff 60%, #e6f2ff 80%);
 }
 
-h1 {
+.header {
   font-size: 16px;
   margin-top: 0;
   display: flex;
@@ -66,7 +66,7 @@ button.disabled {
 }
 
 /* 分頁 (Tabs) 區塊 */
-.myExt_tabs {
+.tabs {
   display: flex;
   list-style: none;
   padding: 0;
@@ -74,7 +74,7 @@ button.disabled {
   border-bottom: 2px solid rgba(255, 255, 255, 0.5);
 }
 
-.myExt_tabs li {
+.tab {
   flex: 1;
   text-align: center;
   padding: 8px 0;
@@ -86,36 +86,40 @@ button.disabled {
   user-select: none;
 }
 
-.myExt_tabs li:last-child {
+.tab:last-child {
   margin-right: 0;
 }
 
-.myExt_tabs li.active {
+.tab.active {
   background: rgba(255, 255, 255, 0.9);
   box-shadow: 0 -2px 5px rgba(0, 0, 0, 0.1) inset;
 }
 
-.myExt_tabContent {
+.tab-content {
   display: none;
   padding: 5px 0;
 }
 
-.myExt_tabContent.active {
+.tab-content.active {
   display: block;
 }
 
 /* 顯示最後更新時間 */
-#myExt_lastUpdated {
+.last-updated {
   margin-top: 8px;
   font-size: 12px;
   color: #666;
 }
 
-#myExt_noteSection {
+.note-section {
   display: none;
 }
 
-#myExt_charCount {
+.note-section.active {
+  display: block;
+}
+
+.char-count {
   font-size: 12px;
   color: #666;
   text-align: right;
@@ -150,7 +154,7 @@ button.disabled {
 }
 
 /* 搜尋輸入框樣式 */
-#myExt_searchInput {
+.search-input {
   width: 100%;
   max-width: 380px;
   padding: 10px 12px;
@@ -163,22 +167,34 @@ button.disabled {
   transition: box-shadow 0.3s ease, border 0.3s ease;
 }
 
-#myExt_searchInput:focus {
+.search-input:focus {
   border-color: #b3d4f4;
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
   outline: none;
 }
 
-#myExt_searchContainer {
+.platform-select {
+  padding: 5px 10px;
+  border-radius: 8px;
+  border: 1px solid #ddd;
+  font-family: inherit;
+  font-size: 14px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  margin-right: 10px;
+}
+
+
+.search-container {
   display: flex;
   gap: 10px;
   align-items: center;
   margin-top: 10px;
 }
 
-#myExt_searchResults {
+.search-results {
   margin-top: 10px;
-  max-height: 150px;
+  max-height: 300px;
+  min-height: 300px;
   overflow-y: auto;
   font-size: 14px;
   padding: 8px;

@@ -8,37 +8,46 @@
   </head>
 
   <body>
-    <h1>個人頁面備註
+    <h1 class="header">
+      個人頁面備註
       <button id="myExt_refreshBtn" class="refresh-btn" title="重新偵測">重新偵測</button>
     </h1>
-    <ul id="myExt_tabMenu" class="myExt_tabs">
-      <li data-tab="myExt_tabNotes" class="active">備註</li>
-      <li data-tab="myExt_tabImportExport">匯入／匯出</li>
-      <li data-tab="myExt_tabSearch">搜尋</li>
+    <ul id="myExt_tabMenu" class="tabs">
+      <li class="tab active" data-tab="myExt_tabNotes">備註</li>
+      <li class="tab" data-tab="myExt_tabSearch">搜尋</li>
+      <li class="tab" data-tab="myExt_tabImportExport">匯入／匯出</li>
     </ul>
-    <div id="myExt_tabNotes" class="myExt_tabContent active">
-      <div id="myExt_message">目前非個人頁面</div>
-      <div id="myExt_noteSection">
-        <textarea id="myExt_noteInput" placeholder="對此人/頻道的備註..." maxlength="100"></textarea>
-        <div id="myExt_charCount">100 / 100</div>
-        <button id="myExt_saveBtn" class="disabled">儲存備註</button>
-        <div id="myExt_lastUpdated"></div>
+    <div id="myExt_tabNotes" class="tab-content active">
+      <div id="myExt_message" class="message">目前非個人頁面</div>
+      <div id="myExt_noteSection" class="note-section">
+        <textarea id="myExt_noteInput" class="note-input" placeholder="對此人/頻道的備註..." maxlength="100"></textarea>
+        <div id="myExt_charCount" class="char-count">100 / 100</div>
+        <button id="myExt_saveBtn" class="save-btn disabled">儲存備註</button>
+        <div id="myExt_lastUpdated" class="last-updated"></div>
       </div>
     </div>
-    <div id="myExt_tabImportExport" class="myExt_tabContent">
-      <button id="myExt_exportBtn">匯出 JSON</button>
-      <textarea id="myExt_jsonInput" placeholder="在此貼上 JSON，再按下方按鈕匯入" style="height:80px;"></textarea>
-      <button id="myExt_importBtn">匯入 JSON</button>
+    <div id="myExt_tabImportExport" class="tab-content">
+      <button id="myExt_exportBtn" class="export-btn">匯出 JSON</button>
+      <textarea id="myExt_jsonInput" class="json-input" placeholder="在此貼上 JSON，再按下方按鈕匯入" style="height:80px;"></textarea>
+      <button id="myExt_importBtn" class="import-btn">匯入 JSON</button>
     </div>
-    <div id="myExt_tabSearch" class="myExt_tabContent">
-      <div id="myExt_searchContainer">
-        <input id="myExt_searchInput" type="text" placeholder="輸入關鍵字進行搜尋" />
-        <button id="myExt_searchBtn">搜尋</button>
+    <div id="myExt_tabSearch" class="tab-content">
+      <div id="myExt_searchContainer" class="search-container">
+        <!-- 平台選擇 -->
+        <select id="myExt_platformSelect" class="platform-select">
+          <option value="IG">Instagram</option>
+          <option value="Threads">Threads</option>
+          <option value="FB">Facebook</option>
+          <option value="YT">YouTube</option>
+        </select>
+        <input id="myExt_searchInput" class="search-input" type="text" placeholder="輸入關鍵字進行搜尋" />
+        <button id="myExt_searchBtn" class="search-btn">搜尋</button>
       </div>
-      <textarea id="myExt_searchResults">
-      </textarea>
+      <textarea id="myExt_searchResults" class="search-results"></textarea>
     </div>
-    <div id="myExt_currentUrl">目前偵測到的頁面：<span id="myExt_currentUrlText">N/A</span></div>
+    <div id="myExt_currentUrl" class="current-url">
+      目前偵測到的頁面：<span id="myExt_currentUrlText" class="current-url-text">N/A</span>
+    </div>
     <script src="model.js"></script>
     <script src="controller.js"></script>
   </body>
