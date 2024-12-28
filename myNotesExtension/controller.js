@@ -25,26 +25,52 @@ document.addEventListener("DOMContentLoaded", function () {
     const storageTypeSelect = document.getElementById("myExt_storageType");
     const apiKeyInput = document.getElementById("myExt_apiKey");
     const serviceUrlInput = document.getElementById("myExt_serviceUrl");
+    const saveSettingsBtn =document.getElementById("saveSettingsBtn");
 
 
     let originalNote = "";
     let userId = null;
+
+    function triggerButtonShake(button) {
+        if (!button || button.classList.contains("disabled")) {
+            // 如果按鈕為空或具有 disabled 類名，則不執行
+            return;
+        }
+
+        // 添加晃動樣式
+        button.classList.add("animate-rotate");
+
+        // 在動畫結束後移除晃動樣式
+        button.addEventListener(
+            "animationend",
+            () => {
+                button.classList.remove("animate-rotate");
+            },
+            { once: true } // 確保只執行一次
+        );
+    }
 
     function initRemoteStorageAndUpdateUI(storageType, apiKey,serviceUrl){
         if (storageType === "remote" && '' !== serviceUrl ) {
             RemoteStorage.init(serviceUrl, apiKey);
             exportBtn.classList.add("disabled");
             importBtn.classList.add("disabled");
+            jsonInput.placeholder = "遠端模式下，無法使用匯入匯出功能";
+            storageTypeSelect.value = storageType;
+            apiKeyInput.value = apiKey;
+            serviceUrlInput.value = serviceUrl;
         } else {
+            exportBtn.classList.remove("disabled");
+            importBtn.classList.remove("disabled");
+            jsonInput.placeholder = "在此貼上 JSON，再按下方按鈕匯入";
             RemoteStorage.init('', '');
             if (storageType === "remote") {
                 chrome.storage.local.set("storageType", "local");
                 storageTypeSelect.value = "local";
             }
+            storageTypeSelect.value = storageType;
         }
-        storageTypeSelect.value = storageType;
-        apiKeyInput.value = apiKey;
-        serviceUrlInput.value = serviceUrl;
+
     }
 
     // 動態注入 contentScript.js
@@ -74,7 +100,9 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 
     // 儲存設定按鈕邏輯
-    document.getElementById("saveSettingsBtn").addEventListener("click", () => {
+    saveSettingsBtn.addEventListener("click", () => {
+
+        triggerButtonShake(saveSettingsBtn);
         let storageType = storageTypeSelect.value;
         const apiKey = apiKeyInput.value.trim();
         const serviceUrl = serviceUrlInput.value.trim();
@@ -100,7 +128,7 @@ document.addEventListener("DOMContentLoaded", function () {
                 if (storageType === "remote") {
                     initRemoteStorageAndUpdateUI(storageType,apiKey,serviceUrl);
                 } else {
-                    initRemoteStorageAndUpdateUI(storageType,'','');
+                    (storageType,'','');
                 }
                 statusBar.textContent = "設定已儲存！";
 
@@ -127,20 +155,22 @@ document.addEventListener("DOMContentLoaded", function () {
 
     // 儲存備註
     saveBtn.addEventListener("click", function () {
+        triggerButtonShake(saveBtn);
         if (!userId) return;
         const newNote = noteInput.value.trim();
-        const systemData = {createdAt: Model.formatDateTime(new Date())};
+        const systemData = {updatedAt: Model.formatDateTime(new Date())};
 
         Model.saveNote(userId, newNote, systemData, function (now) {
             originalNote = newNote;
             saveBtn.classList.add("disabled");
-            lastUpdatedDiv.textContent = `最後變更時間: ${systemData.createdAt}`;
+            lastUpdatedDiv.textContent = `最後變更時間: ${systemData.updatedAt}`;
         });
     });
 
 
     // 匯出備註
     exportBtn.addEventListener("click", function () {
+        triggerButtonShake(exportBtn);
         Model.exportNotes(function (exportData) {
             if (!exportData) {
                 alert("No notes to export.");
@@ -162,6 +192,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
     // 匯入備註
     importBtn.addEventListener("click", function () {
+        triggerButtonShake(importBtn);
         const jsonData = jsonInput.value.trim();
         if (!jsonData) {
             alert("請先貼上 JSON 資料");
@@ -180,6 +211,7 @@ document.addEventListener("DOMContentLoaded", function () {
     });
 
     searchBtn.addEventListener("click", function () {
+        triggerButtonShake(searchBtn);
         const query = searchInput.value.trim();
         const platform = platformSelect.value;
 
@@ -232,6 +264,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
     // 手動刷新功能
     refreshBtn.addEventListener("click", function () {
+        triggerButtonShake(refreshBtn);
         Model.sendMessageToContentScript({type: "MANUAL_REFRESH"}, (response, error) => {
             if (error) {
                 messageDiv.textContent =
@@ -246,9 +279,6 @@ document.addEventListener("DOMContentLoaded", function () {
 
     // 初始化
     function init() {
-
-
-
         injectContentScript(() => {
 
             Model.getCurrentUrl((url) => {
@@ -283,28 +313,3 @@ document.addEventListener("DOMContentLoaded", function () {
     init();
 });
 
-
-// 操作邏輯（根據存取方式執行）
-// function performStorageOperation(action, key, content, callback, errorCallback) {
-//     chrome.storage.local.get("storageType", (settings) => {
-//         const storageType = settings.storageType || "local";
-//
-//         if (storageType === "remote") {
-//             if (action === "read") {
-//                 RemoteStorage.read(key, callback, errorCallback);
-//             } else if (action === "put") {
-//                 RemoteStorage.put(key, content, callback, errorCallback);
-//             } else if (action === "delete") {
-//                 RemoteStorage.delete(key, callback, errorCallback);
-//             }
-//         } else {
-//             if (action === "read") {
-//                 Model.getNote(key, callback);
-//             } else if (action === "put") {
-//                 Model.saveNote(key, content, {}, callback);
-//             } else if (action === "delete") {
-//                 chrome.storage.local.remove(key, callback);
-//             }
-//         }
-//     });
-// }
