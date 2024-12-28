@@ -111,6 +111,10 @@ button.disabled {
   color: #666;
 }
 
+.highlight{
+  letter-spacing: 0.1rem;
+}
+
 .note-section {
   display: none;
 }
@@ -202,4 +206,11 @@ button.disabled {
   border-radius: 8px;
   background: rgba(255, 255, 255, 0.9);
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.storageType-container{
+  margin: 1rem 0;
+}
+.storageType-container .platform-select{
+  margin-left: 0.5rem;
 }

@@ -1,55 +1,82 @@
 <!DOCTYPE html>
 <html>
 
-  <head>
-    <meta charset="utf-8" />
+<head>
+    <meta charset="utf-8"/>
     <title>My Notes Popup</title>
     <link rel="stylesheet" href="popup.css">
-  </head>
+</head>
 
-  <body>
-    <h1 class="header">
-      個人頁面備註
-      <button id="myExt_refreshBtn" class="refresh-btn" title="重新偵測">重新偵測</button>
-    </h1>
-    <ul id="myExt_tabMenu" class="tabs">
-      <li class="tab active" data-tab="myExt_tabNotes">備註</li>
-      <li class="tab" data-tab="myExt_tabSearch">搜尋</li>
-      <li class="tab" data-tab="myExt_tabImportExport">匯入／匯出</li>
-    </ul>
-    <div id="myExt_tabNotes" class="tab-content active">
-      <div id="myExt_message" class="message">目前非個人頁面</div>
-      <div id="myExt_noteSection" class="note-section">
+<body>
+<h1 class="header">
+    個人頁面備註
+    <button id="myExt_refreshBtn" class="refresh-btn" title="重新偵測">重新偵測</button>
+</h1>
+<ul id="myExt_tabMenu" class="tabs">
+    <li class="tab active" data-tab="myExt_tabNotes">備註</li>
+    <li class="tab" data-tab="myExt_tabSearch">搜尋</li>
+    <li class="tab" data-tab="myExt_tabImportExport">匯入／匯出</li>
+    <li class="tab" data-tab="myExt_tabServiceAccess">存取服務</li>
+</ul>
+<!--    -->
+<div id="myExt_tabNotes" class="tab-content active">
+    <div id="myExt_message" class="message">目前非個人頁面</div>
+    <div id="myExt_noteSection" class="note-section">
         <textarea id="myExt_noteInput" class="note-input" placeholder="對此人/頻道的備註..." maxlength="100"></textarea>
         <div id="myExt_charCount" class="char-count">100 / 100</div>
         <button id="myExt_saveBtn" class="save-btn disabled">儲存備註</button>
         <div id="myExt_lastUpdated" class="last-updated"></div>
-      </div>
     </div>
-    <div id="myExt_tabImportExport" class="tab-content">
-      <button id="myExt_exportBtn" class="export-btn">匯出 JSON</button>
-      <textarea id="myExt_jsonInput" class="json-input" placeholder="在此貼上 JSON，再按下方按鈕匯入" style="height:80px;"></textarea>
-      <button id="myExt_importBtn" class="import-btn">匯入 JSON</button>
-    </div>
-    <div id="myExt_tabSearch" class="tab-content">
-      <div id="myExt_searchContainer" class="search-container">
+</div>
+<!--    -->
+<div id="myExt_tabImportExport" class="tab-content">
+    <button id="myExt_exportBtn" class="export-btn">匯出 JSON</button>
+    <textarea id="myExt_jsonInput" class="json-input" placeholder="在此貼上 JSON，再按下方按鈕匯入"
+              style="height:80px;"></textarea>
+    <button id="myExt_importBtn" class="import-btn">匯入 JSON</button>
+</div>
+<!--    -->
+<div id="myExt_tabSearch" class="tab-content">
+    <div id="myExt_searchContainer" class="search-container">
         <!-- 平台選擇 -->
         <select id="myExt_platformSelect" class="platform-select">
-          <option value="IG">Instagram</option>
-          <option value="Threads">Threads</option>
-          <option value="FB">Facebook</option>
-          <option value="YT">YouTube</option>
+            <option value="IG">Instagram</option>
+            <option value="Threads">Threads</option>
+            <option value="FB">Facebook</option>
+            <option value="YT">YouTube</option>
         </select>
-        <input id="myExt_searchInput" class="search-input" type="text" placeholder="輸入關鍵字進行搜尋" />
+        <input id="myExt_searchInput" class="search-input" type="text" placeholder="輸入關鍵字進行搜尋"/>
         <button id="myExt_searchBtn" class="search-btn">搜尋</button>
-      </div>
-      <textarea id="myExt_searchResults" class="search-results"></textarea>
     </div>
-    <div id="myExt_currentUrl" class="current-url">
-      目前偵測到的頁面：<span id="myExt_currentUrlText" class="current-url-text">N/A</span>
+    <textarea id="myExt_searchResults" class="search-results"></textarea>
+</div>
+<!--    -->
+<div id="myExt_tabServiceAccess" class="tab-content hidden">
+    <h2>存取服務設定</h2>
+    <div class="storageType-container">
+        <label for="myExt_storageType">儲存方式</label>
+        <select id="myExt_storageType" class="platform-select">
+            <option value="local">本地儲存</option>
+            <option value="remote">遠端儲存</option>
+        </select>
     </div>
-    <script src="model.js"></script>
-    <script src="controller.js"></script>
-  </body>
+    <div>
+        <label for="myExt_serviceUrl">服務 URL</label>
+        <input type="text" id="myExt_serviceUrl" placeholder="輸入服務 URL" class="search-input"/>
+        <label for="myExt_apiKey">遠端 API 金鑰</label>
+        <input type="password" id="myExt_apiKey" placeholder="輸入您的 API 金鑰" class="search-input"/>
+    </div>
+    <button id="saveSettingsBtn" class="search-btn">儲存設定</button>
+    <div class="highlight last-updated"><b>遠端 API 格式，請參考<a target="_blank"
+                                                                  href="https://github.com/lazyjerry/My-Notes-Extension-Remote/blob/master/README.md">這裡</a></b>
+    </div>
+</div>
+
+<div id="myExt_currentUrl" class="current-url">
+    目前偵測到的頁面：<span id="myExt_currentUrlText" class="current-url-text">N/A</span>
+</div>
+<script src="model.js"></script>
+<script src="controller.js"></script>
+</body>
 
 </html>
