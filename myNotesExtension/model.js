@@ -12,16 +12,19 @@ const RemoteStorage = {
     },
 
     request: function (action, payload, callback, errorCallback) {
+        let body = JSON.stringify({action, ...payload});
+        console.log(body);
         fetch(this.apiUrl, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
                 'jerry-auth': this.apiKey,
             },
-            body: JSON.stringify({action, ...payload}),
+            body: body
         })
             .then((response) => response.json())
             .then((data) => {
+                console.log(data);
                 if (data.isSuccess) {
                     callback(data.result||{});
                 } else {
@@ -29,6 +32,7 @@ const RemoteStorage = {
                 }
             })
             .catch((error) => {
+                console.log(error);
                 errorCallback(error.message || 'Network error occurred.');
             });
     },
