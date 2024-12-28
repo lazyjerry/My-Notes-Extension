@@ -11,6 +11,19 @@ const RemoteStorage = {
         return this.apiUrl && this.apiKey && '' !== this.apiUrl;
     },
 
+    parseJsonString: function (input) {
+    try {
+        // 檢查是否為有效的 JSON 字串
+        const parsed = JSON.parse(input);
+
+        // 如果解析成功，返回解析後的結果
+        return parsed;
+    } catch (error) {
+        // 如果解析失敗，直接返回原始字串
+        return input;
+    }
+},
+
     request: function (action, payload, callback, errorCallback) {
         let body = JSON.stringify({action, ...payload});
         console.log(body);
@@ -20,15 +33,17 @@ const RemoteStorage = {
                 'Content-Type': 'application/json',
                 'jerry-auth': this.apiKey,
             },
-            body: body
+            body: body,
+            mode: 'cors' // 確保模式為 cors
         })
             .then((response) => response.json())
             .then((data) => {
-                console.log(data);
+                console.log("response", data);
                 if (data.isSuccess) {
-                    callback(data.result||{});
+                    let result = this.parseJsonString(data.result);
+                    callback(result || {});
                 } else {
-                    errorCallback(data.result || 'Error occurred during remote operation.');
+                    errorCallback(data.result || '');
                 }
             })
             .catch((error) => {
@@ -39,30 +54,25 @@ const RemoteStorage = {
 
     // 讀取資料
     read: function (key, callback, errorCallback) {
+        console.log("RemoteStorage", "read");
         this.request('read', {key}, callback, errorCallback);
     },
 
     // 新增或更新資料
     put: function (key, content, callback, errorCallback) {
+        console.log("RemoteStorage", "put");
         this.request('put', {key, content}, callback, errorCallback);
     },
 
     // 刪除資料
     delete: function (key, callback, errorCallback) {
+        console.log("RemoteStorage", "delete");
         this.request('delete', {key}, callback, errorCallback);
     },
 };
 
 
 const Model = {
-
-    isLocalStorage: function () {
-        chrome.storage.local.get("storageType", (settings) => {
-                const storageType = settings.storageType || "local";
-                return storageType === "local";
-            }
-        );
-    },
 
     formatDateTime: function (dateObj) {
         const yyyy = dateObj.getFullYear();
@@ -86,26 +96,7 @@ const Model = {
         });
     },
 
-    // 獲取資料
-    getNote: function (userId, callback) {
-        if (RemoteStorage.isWorking()) {
-            let key = userId;
-            RemoteStorage.read(key, function (data) {
-                callback(data);
-            }, function (err) {
-                callback(null);
-            });
-        } else {
-            chrome.storage.local.get(userId, (data) => {
-                if (data) {
-                    callback(data);
-                } else {
-                    console.warn(`No note found for userId: ${userId}`);
-                    callback(null);
-                }
-            });
-        }
-    },
+
 
     // 獲取當前 User ID 和其備註
     getUserData: function (callback) {
@@ -119,20 +110,18 @@ const Model = {
             }
 
             this.getNote(userId, (userNoteData) => {
-                const {note = "", updatedAt = null} = userNoteData[userId] || {};
+                console.log(userNoteData.note);
 
                 callback({
                     userId,
-                    note: note,
-                    updatedAt: updatedAt,
+                    note: userNoteData.note || "",
+                    updatedAt: userNoteData.updatedAt || null,
                 });
             });
         });
     },
 
-    // 儲存備註
-    saveNote: function (userId, note, systemData, callback) {
-        const now = new Date().toISOString();
+    readIndex: function (userId, systemData, callback) {
         let noteIndex = {};
         if (RemoteStorage.isWorking()) {
             const key = "noteIndex";
@@ -140,9 +129,11 @@ const Model = {
                 noteIndex = data.noteIndex || {};
                 // 更新或新增 noteIndex 的資料
                 noteIndex[userId] = {...systemData};
+                callback(noteIndex);
             }, function (err) {
                 noteIndex = {};
-                console.warn(`資料錯誤取得 index 失敗`);
+                noteIndex[userId] = {...systemData};
+                callback(noteIndex);
             });
         } else {
             // 更新 noteIndex 並保存備註
@@ -150,40 +141,47 @@ const Model = {
                 noteIndex = data.noteIndex || {};
                 // 更新或新增 noteIndex 的資料
                 noteIndex[userId] = {...systemData};
+                callback(noteIndex);
             });
         }
+    },
+    // 儲存備註
+    saveNote: function (userId, note, systemData, callback) {
 
-        if (RemoteStorage.isWorking()) {
-            RemoteStorage.put("noteIndex", noteIndex, function (data) {
+        this.readIndex(userId, systemData, function (noteIndex) {
+            const now = new Date().toISOString();
+            if (RemoteStorage.isWorking()) {
+                // 存兩次，一次是 noteIndex
+                RemoteStorage.put("noteIndex", JSON.stringify(noteIndex), function (data) {
+                    console.log(`userId 資料儲存成功`);
+                    // 儲存完 noteIndex 存 userId
+                    const key = userId;
+                    const content = JSON.stringify({note, updatedAt: now});
+                    RemoteStorage.put(key, content, function (data) {
+                        console.log(`Note saved for userId: ${userId}`);
+                        callback();
+                    }, function (err) {
+                        console.warn(`userId 資料儲存錯誤`);
+                    });
 
-                // 儲存完 noteIndex 存 userId
-                const key = userId;
-                const content = {note, updatedAt: now};
-                RemoteStorage.put(key, content, function (data) {
-                    console.log(`Note saved for userId: ${userId}`);
-                    callback();
                 }, function (err) {
-                    console.warn(`userId 資料儲存錯誤`);
+                    console.warn(`noteIndex 資料儲存錯誤`);
                 });
-
-            }, function (err) {
-                console.warn(`noteIndex 資料儲存錯誤`);
-            });
-
-        } else {
-
-            // 同時存儲備註內容
-            chrome.storage.local.set({
+            } else {
+                // 同時存儲備註內容
+                let content = {
                     noteIndex,
                     [userId]: {note, updatedAt: now},
-                },
-                () => {
-                    console.log(`Note saved for userId: ${userId}`);
-                    callback();
-                }
-            );
-        }
-        ;
+                };
+                chrome.storage.local.set(content,
+                    () => {
+                        console.log(`Note saved for userId: ${userId}`);
+                        // console.log(content);
+                        callback();
+                    }
+                );
+            }
+        });
     },
 
     // 匯出備註
@@ -248,6 +246,27 @@ const Model = {
         }
     },
 
+    // 獲取資料
+    getNote: function (userId, callback) {
+        if (RemoteStorage.isWorking()) {
+            let key = userId;
+            RemoteStorage.read(key, function (data) {
+                callback(data);
+            }, function (err) {
+                callback('');
+            });
+        } else {
+            chrome.storage.local.get(userId, (data) => {
+                if (data) {
+                    callback(data[userId]);
+                } else {
+                    console.warn(`No note found for userId: ${userId}`);
+                    callback('');
+                }
+            });
+        }
+    },
+
     // 搜尋備註
     searchNotes: function (query, callback, errorCallback) {
         if (!query.includes("｜")) {
@@ -256,20 +275,34 @@ const Model = {
             return;
         }
 
-        chrome.storage.local.get(query, (items) => {
-            if (items[query]) {
-                // 匹配成功，返回 note
+        this.getNote(query, function(data){
+            console.log(data);
+            if(data){
                 callback({
                     userId: query,
-                    note: items[query].note || "",
-                    updatedAt: items[query].updatedAt || null,
+                    note: data.note || "",
+                    updatedAt: data.updatedAt || null,
                 });
-            } else {
-                // 匹配失敗
+            }else{
                 console.log(`No data found for query: ${query}`);
                 errorCallback(`查詢不到資料: ${query}`);
             }
-        });
+        })
+        //
+        // chrome.storage.local.get(query, (items) => {
+        //     if (items[query]) {
+        //         // 匹配成功，返回 note
+        //         callback({
+        //             userId: query,
+        //             note: items[query].note || "",
+        //             updatedAt: items[query].updatedAt || null,
+        //         });
+        //     } else {
+        //         // 匹配失敗
+        //         console.log(`No data found for query: ${query}`);
+        //         errorCallback(`查詢不到資料: ${query}`);
+        //     }
+        // });
     },
 
     /**
