@@ -17,19 +17,7 @@
 
 ## **功能特色**
 
-1. **自動偵測平臺帳號與頻道**  
-   在 Facebook / Instagram / YouTube / Threads 等平臺頁面，為使用者名稱或頻道頁面加入「備註」輸入框，讓你能隨時紀錄、查看、編輯筆記。
-
-2. **匯出與匯入 JSON**  
-   - 在 Popup 中可一鍵匯出所有備註為 JSON 檔案。  
-   - 匯入功能支援快速恢復資料，可實現多瀏覽器間的同步或重裝後的快速搬移。
-
-3. **搜尋功能**  
-   支援格式化的搜尋功能（如：`FB｜user123`），可快速定位目標帳號的備註資料。
-
-4. **Threads 平臺支援**  
-   - 可偵測 Threads（`threads.net`）的個人頁面網址，並對該使用者新增備註。  
-   - 若無法取得 URL，則需透過分享個人檔案的方式取得正確的連結。
+請參考 [README.md](https://github.com/lazyjerry/My-Notes-Extension/blob/master/README.md) 內功能特色說明。
 
 ---
 

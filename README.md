@@ -2,18 +2,24 @@
 
 為 Facebook / Instagram / YouTube / Threads 帳號（或頻道、粉專）增設備註欄，作為該用戶的標籤用途，並提供「匯出 / 匯入 JSON」功能，可在同一台或多台電腦之間輕鬆同步備註資料。
 
+**現在多了一個可以透過 API 存取遠端資料庫的功能啦！**
+
 ---
 
 ## 功能特色
-
-1. **在 FB / IG / YT / Threads 網頁中自動偵測**  
+1. **支援遠端功能**
+   - 提供遠端添加遠端網址、密鑰的功能進行遠端資料庫儲存。
+   - 請參考 [存取API格式](https://github.com/lazyjerry/My-Notes-Extension-Remote/blob/master/README.md)，實作 API
+   - 也可以參考 [Cloudflare Worker/KV API 範例](https://github.com/lazyjerry/My-Notes-Extension-Remote/tree/master) 部署自己的遠端資料庫。
+2. **在 FB / IG / YT / Threads 網頁中自動偵測**  
    - 為用戶名稱或頻道頁面加入「備註」欄位，讓你能隨時紀錄、查看、編輯筆記。
 
-2. **匯出與匯入 JSON**  
+3. **匯出與匯入 JSON**  
    - 在 Popup 中點擊按鈕，即可將所有備註以 JSON 格式輸出。  
    - 也可將 JSON 貼入匯入欄位，一鍵實現多瀏覽器或重裝後的快速搬移。
+   - 遠端功能不支援匯入匯出，請自行對遠端資料庫動作。
 
-3. **搜尋功能**  
+4. **搜尋功能**  
    - 支援格式化的搜尋功能，可輸入指定的平臺前綴與帳號名稱進行精準查詢。  
    - 適用於多個平臺，讓你快速定位目標帳號的備註資料。
 
@@ -86,6 +92,12 @@ myNotesExtension/
 
 2. **平臺變更**  
    Facebook、Instagram、YouTube 等平臺可能頻繁改動，請定期檢查 `contentScript.js` 的 selector 是否仍能正常插入備註欄。
+
+---
+
+## **更新記錄**
+
+查看完整的版本更新記錄：[changeLog.md](https://github.com/lazyjerry/My-Notes-Extension/blob/main/changeLog.md)
 
 ---
 
