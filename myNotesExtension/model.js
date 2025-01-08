@@ -110,13 +110,20 @@ const Model = {
             }
 
             this.getNote(userId, (userNoteData) => {
-                console.log(userNoteData.note);
-
-                callback({
-                    userId,
-                    note: userNoteData.note || "",
-                    updatedAt: userNoteData.updatedAt || null,
-                });
+                console.log(userNoteData);
+                if(userNoteData) {
+                    callback({
+                        userId,
+                        note: userNoteData.note || "",
+                        updatedAt: userNoteData.updatedAt || null,
+                    });
+                }else{
+                    callback({
+                        userId,
+                        note:  "",
+                        updatedAt:  null,
+                    });
+                }
             });
         });
     },
