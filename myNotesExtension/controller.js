@@ -25,11 +25,15 @@ document.addEventListener("DOMContentLoaded", function () {
     const storageTypeSelect = document.getElementById("myExt_storageType");
     const apiKeyInput = document.getElementById("myExt_apiKey");
     const serviceUrlInput = document.getElementById("myExt_serviceUrl");
-    const saveSettingsBtn =document.getElementById("saveSettingsBtn");
+    const saveSettingsBtn = document.getElementById("saveSettingsBtn");
+
+    const charCountSearch = document.getElementById("myExt_charCount_search");
+    const saveSearchResultBtn = document.getElementById("myExt_saveSearchResultBtn");
 
 
     let originalNote = "";
     let userId = null;
+    let originalNoteSearch = "";
 
     function triggerButtonShake(button) {
         if (!button || button.classList.contains("disabled")) {
@@ -46,12 +50,12 @@ document.addEventListener("DOMContentLoaded", function () {
             () => {
                 button.classList.remove("animate-rotate");
             },
-            { once: true } // 確保只執行一次
+            {once: true} // 確保只執行一次
         );
     }
 
-    function initRemoteStorageAndUpdateUI(storageType, apiKey,serviceUrl){
-        if (storageType === "remote" && '' !== serviceUrl ) {
+    function initRemoteStorageAndUpdateUI(storageType, apiKey, serviceUrl) {
+        if (storageType === "remote" && '' !== serviceUrl) {
             RemoteStorage.init(serviceUrl, apiKey);
             exportBtn.classList.add("disabled");
             importBtn.classList.add("disabled");
@@ -84,7 +88,7 @@ document.addEventListener("DOMContentLoaded", function () {
             // 初始化存取方式
             chrome.storage.local.get(["storageType", "apiKey", "serviceUrl"], (settings) => {
                 const {storageType = "local", apiKey = "", serviceUrl = ""} = settings;
-                initRemoteStorageAndUpdateUI(storageType,apiKey,serviceUrl);
+                initRemoteStorageAndUpdateUI(storageType, apiKey, serviceUrl);
             });
 
             chrome.scripting.executeScript({
@@ -98,6 +102,19 @@ document.addEventListener("DOMContentLoaded", function () {
             );
         });
     }
+
+    function updateSearchTab(platform, userId, noteData) {
+
+        // 更新搜尋欄位
+
+        originalNoteSearch = noteData;
+        platformSelect.value = platform;
+        searchInput.value = userId;
+        searchResultsDiv.value = (noteData && '' !== noteData)
+            ? `${noteData.note}`
+            : "未找到結果。";
+    }
+
 
     // 儲存設定按鈕邏輯
     saveSettingsBtn.addEventListener("click", () => {
@@ -115,7 +132,7 @@ document.addEventListener("DOMContentLoaded", function () {
                 {storageType},
                 () => {
                     statusBar.textContent = "設定強制儲存成本機！";
-                    initRemoteStorageAndUpdateUI(storageType,'','');
+                    initRemoteStorageAndUpdateUI(storageType, '', '');
                 }
             );
 
@@ -126,9 +143,9 @@ document.addEventListener("DOMContentLoaded", function () {
             {storageType, apiKey, serviceUrl},
             () => {
                 if (storageType === "remote") {
-                    initRemoteStorageAndUpdateUI(storageType,apiKey,serviceUrl);
+                    initRemoteStorageAndUpdateUI(storageType, apiKey, serviceUrl);
                 } else {
-                    (storageType,'','');
+                    (storageType, '', '');
                 }
                 statusBar.textContent = "設定已儲存！";
 
@@ -164,6 +181,46 @@ document.addEventListener("DOMContentLoaded", function () {
             originalNote = newNote;
             saveBtn.classList.add("disabled");
             lastUpdatedDiv.textContent = `最後變更時間: ${systemData.updatedAt}`;
+        });
+    });
+
+
+    searchResultsDiv.addEventListener("input", function () {
+        const maxLength = parseInt(noteInput.getAttribute("maxlength"), 10);
+        const currentLength = noteInput.value.length;
+        const remaining = maxLength - currentLength;
+
+        // 更新字數顯示
+        charCountSearch.textContent = `${remaining} / ${maxLength}`;
+
+        // 啟用保存按鈕
+        if (noteInput.value.trim() !== originalNoteSearch.trim()) {
+            saveSearchResultBtn.classList.remove("disabled");
+        } else {
+            saveSearchResultBtn.classList.add("disabled");
+        }
+    });
+
+    saveSearchResultBtn.addEventListener("click", function () {
+        triggerButtonShake(saveSearchResultBtn);
+
+        const query = searchInput.value.trim();
+        const platform = platformSelect.value;
+
+        if (!query || !searchResultsDiv.value) {
+            alert("請先完成搜尋並選擇有效的帳號！");
+            return;
+        }
+
+        const formattedQuery = `${platform}｜${query}`;
+        const newNote = searchResultsDiv.value;
+
+        const systemData = { updatedAt: Model.formatDateTime(new Date()) };
+
+        Model.saveNote(userId, newNote, systemData, function (now) {
+            originalNoteSearch = newNote;
+            saveSearchResultBtn.classList.add("disabled");
+            statusBar.textContent = `儲存成功。最後變更時間: ${systemData.updatedAt}`;
         });
     });
 
@@ -210,6 +267,7 @@ document.addEventListener("DOMContentLoaded", function () {
         );
     });
 
+    // 搜尋
     searchBtn.addEventListener("click", function () {
         triggerButtonShake(searchBtn);
         const query = searchInput.value.trim();
@@ -226,7 +284,9 @@ document.addEventListener("DOMContentLoaded", function () {
             formattedQuery,
             function (result) {
                 if (result) {
-                    searchResultsDiv.value = `${result.userId}｜${result.updatedAt}\n ---- \n${result.note}`;
+                    // 顯示搜尋結果
+                    searchResultsDiv.value = result.note;
+                    originalNoteSearch = result.note;
                     statusBar.textContent = "查詢成功";
                 } else {
                     searchResultsDiv.value = "未找到結果。";
@@ -237,6 +297,7 @@ document.addEventListener("DOMContentLoaded", function () {
             }
         );
     });
+
 
     // 修復分頁切換邏輯
     tabs.forEach(function (tab) {
@@ -289,6 +350,7 @@ document.addEventListener("DOMContentLoaded", function () {
                 if (!userData) {
                     messageDiv.textContent = "目前非個人頁面";
                     noteSection.style.display = "none";
+                    lastUpdatedDiv.textContent = "尚未有更新紀錄";
                     return;
                 }
 
@@ -304,6 +366,14 @@ document.addEventListener("DOMContentLoaded", function () {
                 } else {
                     lastUpdatedDiv.textContent = "尚未有更新紀錄";
                 }
+
+                // 自動切換到搜尋頁籤並顯示內容
+                const platform = userId.split("｜")[0];
+                updateSearchTab(platform, userId.split("｜")[1], {
+                    note: userData.note,
+                    updatedAt: userData.updatedAt,
+                });
+
             });
 
         });

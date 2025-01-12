@@ -187,7 +187,6 @@ button.disabled {
   margin-right: 10px;
 }
 
-
 .search-container {
   display: flex;
   gap: 10px;
@@ -197,8 +196,8 @@ button.disabled {
 
 .search-results {
   margin-top: 10px;
-  max-height: 300px;
-  min-height: 300px;
+  max-height: 200px;
+  min-height: 200px;
   overflow-y: auto;
   font-size: 14px;
   padding: 8px;
