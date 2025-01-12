@@ -1,18 +1,19 @@
 # My Notes Extension 社群標籤
 
-為 Facebook / Instagram / YouTube / Threads 帳號（或頻道、粉專）增設備註欄，作為該用戶的標籤用途，並提供「匯出 / 匯入 JSON」功能，可在同一台或多台電腦之間輕鬆同步備註資料。
-
-**現在多了一個可以透過 API 存取遠端資料庫的功能啦！**
+在 IG / Facebook / YouTube / Threads 等社群平台上可以添加、搜索自訂的備註，記錄對這個人/帳號的印象筆記。
+**現在可以從搜尋頁籤中編輯用戶的標籤備註啦！**
 
 ---
 
 ## 功能特色
+
 1. **支援遠端功能**
    - 提供遠端添加遠端網址、密鑰的功能進行遠端資料庫儲存。
    - 請參考 [存取API格式](https://github.com/lazyjerry/My-Notes-Extension-Remote/blob/master/README.md)，實作 API
    - 也可以參考 [Cloudflare Worker/KV API 範例](https://github.com/lazyjerry/My-Notes-Extension-Remote/tree/master) 部署自己的遠端資料庫。
-2. **在 FB / IG / YT / Threads 網頁中自動偵測**  
-   - 為用戶名稱或頻道頁面加入「備註」欄位，讓你能隨時紀錄、查看、編輯筆記。
+   
+2. **在 FB / IG / YT / Threads 網頁中自動偵測帳號**  
+   - 為用戶名稱或頻道頁面加入「標籤」欄位，讓你能隨時紀錄、查看、編輯筆記。
 
 3. **匯出與匯入 JSON**  
    - 在 Popup 中點擊按鈕，即可將所有備註以 JSON 格式輸出。  
@@ -22,6 +23,7 @@
 4. **搜尋功能**  
    - 支援格式化的搜尋功能，可輸入指定的平臺前綴與帳號名稱進行精準查詢。  
    - 適用於多個平臺，讓你快速定位目標帳號的備註資料。
+   - 於搜尋後可編輯內容並且儲存，實現在非個人頁面上也能查詢/編輯指定帳號。
 
 ---
 
@@ -109,3 +111,4 @@ myNotesExtension/
 ---
 
 感謝你使用 **My Notes Extension**！如有進一步使用上的疑問，請於 Issue 中回報或透過聯繫方式向我們提出建議！
+Siā-kûn Pe̍h-tiâu Hoan-gêng Lín
