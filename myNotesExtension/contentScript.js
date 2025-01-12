@@ -151,6 +151,10 @@
       return null;
     }
 
+    if(pathParts[0] === "watch"){
+      return null;
+    }
+
     // 1) 偵測 @xxxx
     if (pathParts[0].startsWith("@")) {
       // e.g. "@napalmrecords"

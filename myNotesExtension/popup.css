@@ -213,3 +213,7 @@ button.disabled {
 .storageType-container .platform-select{
   margin-left: 0.5rem;
 }
+
+.hidden{
+  display: none;
+}
