@@ -20,7 +20,8 @@ document.addEventListener("DOMContentLoaded", function () {
     const tabs = document.querySelectorAll("#myExt_tabMenu .tab");
     const tabContents = document.querySelectorAll(".tab-content");
 
-    const statusBar = document.getElementById("myExt_currentUrlText");
+    const statusBar = document.getElementById("myExt_statusBar");
+    const urlText = document.getElementById("myExt_currentUrlText");
 
     const storageTypeSelect = document.getElementById("myExt_storageType");
     const apiKeyInput = document.getElementById("myExt_apiKey");
@@ -106,7 +107,6 @@ document.addEventListener("DOMContentLoaded", function () {
     function updateSearchTab(platform, userId, noteData) {
 
         // 更新搜尋欄位
-
         originalNoteSearch = noteData;
         platformSelect.value = platform;
         searchInput.value = userId;
@@ -184,17 +184,16 @@ document.addEventListener("DOMContentLoaded", function () {
         });
     });
 
-
     searchResultsDiv.addEventListener("input", function () {
-        const maxLength = parseInt(noteInput.getAttribute("maxlength"), 10);
-        const currentLength = noteInput.value.length;
+        const maxLength = parseInt(searchResultsDiv.getAttribute("maxlength"), 10);
+        const currentLength = searchResultsDiv.value.length;
         const remaining = maxLength - currentLength;
 
         // 更新字數顯示
         charCountSearch.textContent = `${remaining} / ${maxLength}`;
 
         // 啟用保存按鈕
-        if (noteInput.value.trim() !== originalNoteSearch.trim()) {
+        if (searchResultsDiv.value.trim() !== originalNoteSearch.trim()) {
             saveSearchResultBtn.classList.remove("disabled");
         } else {
             saveSearchResultBtn.classList.add("disabled");
@@ -208,7 +207,7 @@ document.addEventListener("DOMContentLoaded", function () {
         const platform = platformSelect.value;
 
         if (!query || !searchResultsDiv.value) {
-            alert("請先完成搜尋並選擇有效的帳號！");
+            searchResultsDiv.value = "請輸入關鍵字。";
             return;
         }
 
@@ -216,8 +215,8 @@ document.addEventListener("DOMContentLoaded", function () {
         const newNote = searchResultsDiv.value;
 
         const systemData = { updatedAt: Model.formatDateTime(new Date()) };
-
-        Model.saveNote(userId, newNote, systemData, function (now) {
+        
+        Model.saveNote(formattedQuery, newNote, systemData, function (now) {
             originalNoteSearch = newNote;
             saveSearchResultBtn.classList.add("disabled");
             statusBar.textContent = `儲存成功。最後變更時間: ${systemData.updatedAt}`;
@@ -299,10 +298,10 @@ document.addEventListener("DOMContentLoaded", function () {
     });
 
 
-    // 修復分頁切換邏輯
+    // 分頁切換
     tabs.forEach(function (tab) {
         tab.addEventListener("click", function () {
-
+            statusBar.textContent = '';
             const targetTab = tab.getAttribute("data-tab");
 
             // 移除所有分頁的 active 標記
@@ -343,7 +342,7 @@ document.addEventListener("DOMContentLoaded", function () {
         injectContentScript(() => {
 
             Model.getCurrentUrl((url) => {
-                statusBar.textContent = url;
+                urlText.textContent = url;
             });
 
             Model.getUserData((userData) => {
