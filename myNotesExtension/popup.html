@@ -4,41 +4,40 @@
 <head>
     <meta charset="utf-8"/>
     <title>My Notes Popup</title>
-    <link rel="stylesheet" href="popup.css">
+    <link rel="stylesheet" href="popup.css?v=1.0">
 </head>
 
 <body>
 <h1 class="header">
-    個人頁面備註
+    社群標籤
     <button id="myExt_refreshBtn" class="refresh-btn" title="重新偵測">重新偵測</button>
 </h1>
 <ul id="myExt_tabMenu" class="tabs">
-    <li class="tab active" data-tab="myExt_tabNotes">備註</li>
-    <li class="tab" data-tab="myExt_tabSearch">搜尋</li>
+    <li class="tab active" data-tab="myExt_tabNotes">偵測標籤</li>
+    <li class="tab" data-tab="myExt_tabSearch">指定搜尋</li>
     <li class="tab" data-tab="myExt_tabImportExport">匯入／匯出</li>
     <li class="tab" data-tab="myExt_tabServiceAccess">存取服務</li>
 </ul>
-<!--    -->
+<!--  備註  -->
 <div id="myExt_tabNotes" class="tab-content active">
     <div id="myExt_message" class="message">目前非個人頁面</div>
-    <div id="myExt_noteSection" class="note-section">
+    <div id="myExt_noteSection" class="note-section active">
         <textarea id="myExt_noteInput" class="note-input" placeholder="對此人/頻道的備註..." maxlength="100"></textarea>
         <div id="myExt_charCount" class="char-count">100 / 100</div>
-        <button id="myExt_saveBtn" class="save-btn disabled">儲存備註</button>
+        <button id="myExt_saveBtn" class="save-btn disabled">儲存標籤/備註</button>
         <div id="myExt_lastUpdated" class="last-updated"></div>
     </div>
 </div>
-<!--    -->
+<!--  匯入／匯出  -->
 <div id="myExt_tabImportExport" class="tab-content">
     <button id="myExt_exportBtn" class="export-btn">匯出 JSON</button>
     <textarea id="myExt_jsonInput" class="json-input" placeholder=""
               style="height:80px;"></textarea>
     <button id="myExt_importBtn" class="import-btn">匯入 JSON</button>
 </div>
-<!--    -->
+<!--  搜尋  -->
 <div id="myExt_tabSearch" class="tab-content">
     <div id="myExt_searchContainer" class="search-container">
-        <!-- 平台選擇 -->
         <select id="myExt_platformSelect" class="platform-select">
             <option value="IG">Instagram</option>
             <option value="Threads">Threads</option>
@@ -48,9 +47,11 @@
         <input id="myExt_searchInput" class="search-input" type="text" placeholder="輸入關鍵字進行搜尋"/>
         <button id="myExt_searchBtn" class="search-btn">搜尋</button>
     </div>
-    <textarea id="myExt_searchResults" class="search-results"></textarea>
+    <textarea id="myExt_searchResults" class="search-results" placeholder="對此人/頻道的備註..." maxlength="100"></textarea>
+    <div id="myExt_charCount_search" class="char-count">100 / 100</div>
+    <button id="myExt_saveSearchResultBtn" class="save-btn">儲存變更結果</button>
 </div>
-<!--    -->
+<!--  存取服務  -->
 <div id="myExt_tabServiceAccess" class="tab-content hidden">
     <h2>存取服務設定</h2>
     <div class="storageType-container">
@@ -73,7 +74,7 @@
 </div>
 
 <div id="myExt_currentUrl" class="current-url">
-    目前偵測到的頁面：<span id="myExt_currentUrlText" class="current-url-text">N/A</span>
+    訊息：<span id="myExt_currentUrlText" class="current-url-text">Siā-kûn Pe̍h-tiâu Hoan-gêng Lín</span>
 </div>
 <script src="model.js"></script>
 <script src="controller.js"></script>

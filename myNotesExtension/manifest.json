@@ -1,8 +1,8 @@
 {
   "name": "My Notes Extension",
-  "version": "2.1.0",
+  "version": "2.2.0",
   "manifest_version": 3,
-  "description": "在 IG / Facebook / YouTube / Threads 網頁的個人資料頁面， 點擊可添加 / 修改 / 查看/搜索備註的欄位，並支援匯出與匯入 JSON。現在多了一個可以遠端儲存資料庫的功能。",
+  "description": "在 IG / Facebook / YouTube / Threads 等社群平台上可以添加、搜索自訂的備註，記錄對這個人/帳號的印象筆記。",
   "permissions": [
     "storage",
     "scripting",
