@@ -215,7 +215,7 @@ document.addEventListener("DOMContentLoaded", function () {
         const newNote = searchResultsDiv.value;
 
         const systemData = { updatedAt: Model.formatDateTime(new Date()) };
-        
+
         Model.saveNote(formattedQuery, newNote, systemData, function (now) {
             originalNoteSearch = newNote;
             saveSearchResultBtn.classList.add("disabled");
