@@ -26,6 +26,9 @@
         <div id="myExt_charCount" class="char-count">100 / 100</div>
         <button id="myExt_saveBtn" class="save-btn disabled">儲存標籤/備註</button>
         <div id="myExt_lastUpdated" class="last-updated"></div>
+        <div id="myExt_currentUrl" class="current-url">
+            最後偵測頁面： <span id="myExt_currentUrlText" class="current-url-text">Siā-kûn Pe̍h-tiâu Hoan-gêng Lín</span>
+        </div>
     </div>
 </div>
 <!--  匯入／匯出  -->
@@ -44,7 +47,7 @@
             <option value="FB">Facebook</option>
             <option value="YT">YouTube</option>
         </select>
-        <input id="myExt_searchInput" class="search-input" type="text" placeholder="輸入關鍵字進行搜尋"/>
+        <input id="myExt_searchInput" class="search-input" type="text" placeholder="輸入關鍵字"/>
         <button id="myExt_searchBtn" class="search-btn">搜尋</button>
     </div>
     <textarea id="myExt_searchResults" class="search-results" placeholder="對此人/頻道的備註..." maxlength="100"></textarea>
@@ -72,10 +75,8 @@
                                                                   href="https://github.com/lazyjerry/My-Notes-Extension-Remote/blob/master/README.md">這裡</a></b>
     </div>
 </div>
+<div id="myExt_statusBar" class="current-url"></div>
 
-<div id="myExt_currentUrl" class="current-url">
-    訊息：<span id="myExt_currentUrlText" class="current-url-text">Siā-kûn Pe̍h-tiâu Hoan-gêng Lín</span>
-</div>
 <script src="model.js"></script>
 <script src="controller.js"></script>
 </body>
