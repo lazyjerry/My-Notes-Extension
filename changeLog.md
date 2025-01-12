@@ -3,3 +3,4 @@
 1. 2024-12-23 1.0.0 第一版
 2. 2024-12-24 2.0.0 更新搜尋功能、更新 logo
 3. 2024-12-29 2.1.0 更新遠端功能，提供遠端 [Cloudflare Worker/KV API 範例](https://github.com/lazyjerry/My-Notes-Extension-Remote/tree/master)
+4. 2025-01-13 2.2.0 更新可從搜尋頁籤中，編輯用戶備註功能；調整文字用法。
