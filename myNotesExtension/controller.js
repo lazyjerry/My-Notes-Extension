@@ -104,6 +104,7 @@ document.addEventListener("DOMContentLoaded", function () {
         });
     }
 
+    // 初始化之後，更新搜尋頁籤
     function updateSearchTab(platform, userId, noteData) {
 
         // 更新搜尋欄位
@@ -113,6 +114,31 @@ document.addEventListener("DOMContentLoaded", function () {
         searchResultsDiv.value = (noteData && '' !== noteData)
             ? `${noteData.note}`
             : "未找到結果。";
+
+        showSearchLink(platform, userId);
+    }
+
+    function showSearchLink(platform, query){
+        // 動態更新社群網站連結
+        const accountAnchor = document.getElementById("myExt_accountAnchor");
+        let baseUrl = "";
+        switch (platform) {
+            case "IG":
+                baseUrl = "https://www.instagram.com/";
+                break;
+            case "Threads":
+                baseUrl = "https://www.threads.net/@";
+                break;
+            case "FB":
+                baseUrl = "https://www.facebook.com/";
+                break;
+            case "YT":
+                baseUrl = "https://www.youtube.com/@";
+                break;
+        }
+        accountAnchor.href = `${baseUrl}${query}`;
+        accountAnchor.textContent = `前往 ${platform} 上的帳號：${query}`;
+        document.getElementById("myExt_accountLink").classList.remove("hidden");
     }
 
 
@@ -287,6 +313,7 @@ document.addEventListener("DOMContentLoaded", function () {
                     searchResultsDiv.value = result.note;
                     originalNoteSearch = result.note;
                     statusBar.textContent = "查詢成功";
+                    showSearchLink(platform, query);
                 } else {
                     searchResultsDiv.value = "未找到結果。";
                 }
