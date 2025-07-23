@@ -1,6 +1,6 @@
 {
 	"name": "My Notes Extension",
-	"version": "2.2.0",
+	"version": "2.2.1",
 	"manifest_version": 3,
 	"description": "在 IG / Facebook / YouTube / Threads 等社群平台上可以添加、搜索自訂的備註，記錄對這個人/帳號的印象筆記。",
 	"permissions": ["storage", "scripting", "tabs"],
