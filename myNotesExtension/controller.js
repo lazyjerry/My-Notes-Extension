@@ -355,7 +355,7 @@ document.addEventListener("DOMContentLoaded", function () {
         Model.sendMessageToContentScript({type: "MANUAL_REFRESH"}, (response, error) => {
             if (error) {
                 messageDiv.textContent =
-                    "目前頁面無法刷新，請確認是否支援注入內容腳本。";
+                    "目前頁面無法刷新，請確認是否支援注入內容腳本。"+error.message;
             } else if (response && response.done) {
                 console.log("Manual refresh successful.");
                 init(); // 重新初始化數據

@@ -1,33 +1,21 @@
 {
-  "name": "My Notes Extension",
-  "version": "2.2.0",
-  "manifest_version": 3,
-  "description": "在 IG / Facebook / YouTube / Threads 等社群平台上可以添加、搜索自訂的備註，記錄對這個人/帳號的印象筆記。",
-  "permissions": [
-    "storage",
-    "scripting",
-    "tabs"
-  ],
-  "host_permissions": [
-    "*://*.threads.net/*",
-    "*://*.facebook.com/*",
-    "*://*.instagram.com/*",
-    "*://*.youtube.com/*"
-  ],
-  "action":
-  {
-    "default_popup": "popup.html"
-  },
-  "background":
-  {
-    "service_worker": "background.js"
-  },
-  "icons":
-  {
-    "16": "img/icon-16.png",
-    "32": "img/icon-32.png",
-    "48": "img/icon-48.png",
-    "128": "img/icon-128.png",
-    "400": "img/icon.png"
-  }
+	"name": "My Notes Extension",
+	"version": "2.2.0",
+	"manifest_version": 3,
+	"description": "在 IG / Facebook / YouTube / Threads 等社群平台上可以添加、搜索自訂的備註，記錄對這個人/帳號的印象筆記。",
+	"permissions": ["storage", "scripting", "tabs"],
+	"host_permissions": ["*://*.threads.net/*", "*://*.threads.com/*", "*://*.facebook.com/*", "*://*.instagram.com/*", "*://*.youtube.com/*"],
+	"action": {
+		"default_popup": "popup.html"
+	},
+	"background": {
+		"service_worker": "background.js"
+	},
+	"icons": {
+		"16": "img/icon-16.png",
+		"32": "img/icon-32.png",
+		"48": "img/icon-48.png",
+		"128": "img/icon-128.png",
+		"400": "img/icon.png"
+	}
 }

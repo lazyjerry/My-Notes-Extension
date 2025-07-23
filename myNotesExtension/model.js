@@ -327,7 +327,7 @@ const Model = {
 
             chrome.tabs.sendMessage(tabs[0].id, message, (response) => {
                 if (chrome.runtime.lastError) {
-                    console.warn("Message send error: ", chrome.runtime.lastError.message);
+                    // console.warn("Message send error: ", chrome.runtime.lastError.message);
                     callback(null, chrome.runtime.lastError);
                 } else {
                     callback(response, null);

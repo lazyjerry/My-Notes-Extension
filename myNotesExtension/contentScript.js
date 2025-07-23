@@ -20,6 +20,7 @@
 
   // === 核心：parseUserId 函式 ===
   function parseUserId(urlString) {
+    console.log("parseUserId() called with URL:", urlString);
     try {
       let u = new URL(urlString);
 
@@ -49,7 +50,8 @@
           return "YT｜" + ytId;
         }
       } // ------- Threads --------
-      else if (u.hostname.includes("threads.net")) {
+      else if (u.hostname.includes("threads.net") || u.hostname.includes("threads.com")) {
+        console.log("This is a Threads URL:", urlString);
         let threadsId = parseThreads(u);
         if (threadsId) {
           return "Threads｜" + threadsId;
@@ -85,24 +87,36 @@
 
   // === 針對 IG 先用 URL 判斷 ===
   function parseInstagramByUrl(u) {
-    // /{username}，排除 /direct, /explore, /accounts 等系統路徑
-    if (u.pathname.length > 1) {
-      let igName = u.pathname.split("/")[1];
-      if (igName && igName.length > 0 &&
-        igName !== 'direct' &&
-        igName !== 'explore' &&
-        igName !== 'accounts') {
-        return igName;
+    // 取出第一段 pathname (去掉開頭與結尾的斜線後以 / 分段)
+    const part = u.pathname.split("/").filter(Boolean)[0];   // 例: "username"
+
+    // 首頁 ("/") 直接視為無法解析
+    if (!part) {
+      return null;
+    }
+
+    // 系統預留路徑：不是使用者個人頁
+    const reserved = [
+      "direct",
+      "explore",
+      "accounts",
+      "p",       // 貼文
+      "reel",    // Reels
+      "tv",      // IGTV 舊網址
+      "stories"
+    ];
+
+    // 如果是保留字，取得下一個 path part
+    // 例如：如果是 "/explore/tags/xxx"，則取 "tags"
+    if (reserved.includes(part)) {
+      const nextPart = u.pathname.split("/").filter(Boolean)[1];
+      if (nextPart) {
+        return nextPart;
       }
     }
 
-    if (igName !== 'direct' &&
-      igName !== 'explore' &&
-      igName !== 'accounts') {
-      return false;
-    }
-
-    return null;
+    // 其餘情況都視為使用者名稱
+    return part;
   }
 
   // === 進一步偵測 IG 的 <meta property="og:type" content="profile"> ===
@@ -129,7 +143,7 @@
     // pathname => "/@lion.ifbbpro" (或 "/@wonfulovesyou", "/@ikicks0777")
     // 只要檢查第一個 pathPart 是否以 "@" 開頭，是則去掉 "@"
     let parts = u.pathname.split("/").filter(Boolean);
-    if (parts.length === 1 && parts[0].startsWith("@")) {
+    if ( parts[0].startsWith("@")) {
       // 去掉 "@" 後回傳
       return parts[0].substring(1);
     }
